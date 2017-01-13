@@ -1,51 +1,63 @@
+import _ from 'lodash'
 import React from 'react'
 import classNames from 'classnames'
 
 // css
 import styles from '../../css/oekakiTool.css'
 
+// utils
+import { OEKAKI_MODE } from '../constants/OekakiMode'
+
 export default class OekakiTool extends React.Component {
   static propTypes = {
-    handleEraser: React.PropTypes.func.isRequired,
-    handlePencil: React.PropTypes.func.isRequired,
-    handleZoom: React.PropTypes.func.isRequired,
-  }
-
-  componentWillMount() {
-    this.setState({
-      selected: 'pencil'
-    })
+    oekakiMode: React.PropTypes.string,
+    oekaki: React.PropTypes.object.isRequired,
+    changeOekaki: React.PropTypes.func.isRequired,
+    changeStage: React.PropTypes.func.isRequired,
   }
 
   render () {
-    const { handleEraser, handlePencil, handleZoom } = this.props
-    const { selected } = this.state
+    const { oekakiMode } = this.props
+
     return (
       <div className={styles.tool}>
         <ul className={styles.items}>
-          <MenuItem onClick={() => {
-            handlePencil();
-            this.setState({selected: 'pencil'})
-           }} selected={selected === 'pencil'} iconName='fa-pencil'>
-          </MenuItem>
-          <MenuItem onClick={() => {
-            handleEraser();
-            this.setState({selected: 'eraser'})
-           }} selected={selected === 'eraser'} iconName='fa-eraser'>
-          </MenuItem>
-          <MenuItem onClick={() => {
-            handleZoom(true);
-            this.setState({selected: 'zoomIn'})
-           }} selected={selected === 'zoomIn'} iconName='fa-search-plus'>
-          </MenuItem>
-          <MenuItem onClick={() => {
-            handleZoom(false);
-            this.setState({selected: 'zoomOut'})
-           }} selected={selected === 'zoomOut'} iconName='fa-search-minus'>
-          </MenuItem>
+          {_.map(OEKAKI_MODE, (mode) => {
+            return (
+              <MenuItem key={mode.type} onClick={() => {
+                this.handleChangeTool(mode.type)
+              }} selected={oekakiMode === mode.type} iconName={`fa-${mode.iconName}`}>
+              </MenuItem>
+            )
+          })}
         </ul>
       </div>
     )
+  }
+
+  handleChangeTool(name) {
+    const { stage, oekaki, changeOekaki, updateCanvas, changeStage } = this.props;
+    switch (name){
+    case 'pencil':
+      oekaki.changeFillStyle({fillStyle: oekaki.color})
+      break
+    case 'eraser':
+      oekaki.changeFillStyle({fillStyle: ''})
+      break
+    case 'dropper':
+      break
+    case 'zoomIn':
+      stage.zoom(1.5)
+      break
+    case 'zoomOut':
+      stage.zoom(0.5)
+      break
+    }
+
+    oekaki.changeMode({mode: name})
+    changeOekaki(oekaki)
+    updateCanvas()
+    changeStage(stage)
   }
 }
 

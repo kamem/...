@@ -26,11 +26,16 @@ export class Oekaki {
     this.repeatSpeed = 10
     this.drawingFunction = drawingFunction
     this.endFunction = endFunction
+
+    this.mode = 'pencil'
+  }
+
+  changeMode({mode}) {
+    this.mode = mode
   }
 
   changeColor({color}) {
     this.color = color
-
   }
 
   changeFillStyle({fillStyle}) {
@@ -76,6 +81,7 @@ export class Oekaki {
     pointY = this.pointY,
     fillStyle = this.fillStyle
   }) {
+    this.stage.ctx.beginPath()
     const color = selectColor(this.stage.getLayerPxColors({pointX, pointY}))[2]
     const action = color ? 'fillRect' : 'clearRect'
     this.stage.ctx.fillStyle = color
@@ -106,20 +112,12 @@ export class Oekaki {
   }
 
   setDrawEvent() {
-    const elTop = this.stage.$el.offset().top
-    const elLeft = this.stage.$el.offset().left
-
     this.stage.$el
     .on(EVENT_TYPE.touchStart, (e) => {
       const touchEvent = isMobile ? e.originalEvent.touches[0] : e
 
-      const elTop = this.stage.$el.offset().top
-      const elLeft = this.stage.$el.offset().left
       this.changeDrawing(true)
-      this.drawStart({
-        x: touchEvent.pageX - elLeft,
-        y: touchEvent.pageY - elTop
-      })
+      this.getEvent(touchEvent.pageX, touchEvent.pageY)
     })
     .on(EVENT_TYPE.touchMove, (e) => {
       if(!this.isDrawing) return
@@ -127,12 +125,7 @@ export class Oekaki {
 
       const touchEvent = isMobile ? e.originalEvent.touches[0] : e
 
-      const elTop = this.stage.$el.offset().top
-      const elLeft = this.stage.$el.offset().left
-      this.drawStart({
-        x: touchEvent.pageX - elLeft,
-        y: touchEvent.pageY - elTop
-      })
+      this.getEvent(touchEvent.pageX, touchEvent.pageY)
     })
     .on(EVENT_TYPE.touchEnd, (e) => {
       this.changeDrawing(false)
@@ -144,11 +137,35 @@ export class Oekaki {
     });
   }
 
-  drawStart({x, y}) {
+  getEvent(pageX, pageY) {
+    const elTop = this.stage.$el.offset().top
+    const elLeft = this.stage.$el.offset().left
+
+    const x = pageX - elLeft;
+    const y = pageY - elTop;
+
     this.changePoint({x, y})
     this.changeStartPoint({x, y})
     this.changeDrawPoint()
 
+    switch (this.mode){
+      case 'pencil':
+        this.drawStart()
+        break
+      case 'eraser':
+        this.drawStart()
+        break
+      case 'dropper':
+        this.dropper()
+        break
+      case 'zoomIn':
+        break
+      case 'zoomOut':
+        break
+    }
+  }
+
+  drawStart() {
     const { pointX, pointY } = this.getDrawPoint({})
 
     this.stage.changeStagePxColor({
@@ -164,5 +181,13 @@ export class Oekaki {
     this.addHistory()
 
     if(this.drawingFunction) this.drawingFunction()
+  }
+
+  dropper() {
+    const { pointX, pointY } = this.getDrawPoint({})
+    const color = selectColor(this.stage.getLayerPxColors({pointX, pointY}))[2]
+
+    this.fillStyle = color
+    this.color = color
   }
 }

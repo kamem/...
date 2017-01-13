@@ -90,6 +90,14 @@ export class Stage {
     return this.layers[layerNum].ary[pointY][pointX]
   }
 
+  zoom(percent) {
+    this.changeSize({
+      pxWidth: Math.floor(this.pxWidth * percent),
+      pxHeight: Math.floor(this.pxHeight * percent),
+    })
+    this.setLayer({})
+  }
+
   moveLayer({from, to}, isSetHistory = true) {
     const toItem = this.layers[to]
     const fromItem = this.layers[from]

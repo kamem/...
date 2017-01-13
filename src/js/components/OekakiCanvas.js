@@ -26,16 +26,19 @@ export class OekakiCanvas extends React.Component {
 
 	render () {
 		const {
+			stage,
 			stage: {
 				canvasWidth: width,
 				canvasHeight: height,
 				layers,
-				layerNum
+				layerNum,
 			},
 			oekaki,
 			oekaki: {
+				mode,
 				color
-			}
+			},
+			OekakiCanvasActions: { changeOekaki, changeStage }
 		} = this.props
 
 		return (
@@ -43,14 +46,17 @@ export class OekakiCanvas extends React.Component {
 				<OekakiHeader
 					handleSave={::this.handleSave}
 					handleReplay={::this.handleReplay}
-					handleEraser={::this.handleEraser}
 				/>
 
 				<OekakiTool
-					oekaki={oekaki}
-					handleEraser={::this.handleEraser}
-					handlePencil={::this.handlePencil}
-					handleZoom={::this.handleZoom}
+					oekakiMode={mode}
+					updateCanvas={::this.updateCanvas}
+					{...{
+						stage,
+						oekaki,
+						changeOekaki,
+						changeStage
+					}}
 				/>
 
 				<div className={styles.stage}>
@@ -62,8 +68,8 @@ export class OekakiCanvas extends React.Component {
 				<div className={styles.mini}></div>
 
 				<OekakiColor
-					handleChangeColor={::this.handleChangeColor}
 					{...{
+						oekaki,
 						color
 					}}
 				/>
@@ -91,8 +97,6 @@ export class OekakiCanvas extends React.Component {
 	}
 
 	componentDidMount() {
-
-
 		const $el = $(`.${styles.oekaki}`)
 		const $mini = $(`.${styles.mini}`)
 
@@ -158,7 +162,6 @@ export class OekakiCanvas extends React.Component {
 		changeOekaki(oekaki)
 		changeMiniOekaki(miniOekaki)
 		changeHistory(history)
-		console.log(stage.layers);
 	}
 
 	handleMoveLayer(fromTo) {
@@ -196,34 +199,6 @@ export class OekakiCanvas extends React.Component {
 		} = this.props
 		stage.createNewLayer()
 		changeStage(stage)
-	}
-
-	handleEraser() {
-		const oekaki = this.props.oekaki;
-		oekaki.changeFillStyle({fillStyle: ''})
-	}
-
-	handlePencil() {
-		const oekaki = this.props.oekaki;
-		oekaki.changeFillStyle({fillStyle: oekaki.color})
-	}
-
-	handleZoom(isIn) {
-		const stage = this.props.stage;
-		stage.changeSize({
-			pxWidth: Math.floor(isIn ? stage.pxWidth * 1.5 : stage.pxWidth / 1.5),
-			pxHeight: Math.floor(isIn ? stage.pxHeight * 1.5 : stage.pxHeight / 1.5),
-		})
-		stage.setLayer({})
-		this.updateCanvas()
-		this.props.OekakiCanvasActions.changeStage(stage)
-	}
-
-	handleChangeColor(colors) {
-		console.log(colors);
-		const color = colors.color
-		this.props.oekaki.changeColor({color})
-		this.props.oekaki.changeFillStyle({fillStyle: color})
 	}
 
 	handleChangeLayer(layerNum) {
