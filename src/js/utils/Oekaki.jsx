@@ -159,8 +159,12 @@ export class Oekaki {
         this.dropper()
         break
       case 'zoomIn':
+        this.stage.zoom(1.5)
+        this.load()
         break
       case 'zoomOut':
+        this.stage.zoom(0.5)
+        this.load()
         break
     }
   }

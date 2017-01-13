@@ -47,10 +47,8 @@ export default class OekakiTool extends React.Component {
     case 'dropper':
       break
     case 'zoomIn':
-      stage.zoom(1.5)
       break
     case 'zoomOut':
-      stage.zoom(0.5)
       break
     }
 
