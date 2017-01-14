@@ -38,14 +38,18 @@ export class OekakiCanvas extends React.Component {
 				mode,
 				color
 			},
+			history,
 			OekakiCanvasActions: { changeOekaki, changeStage }
 		} = this.props
 
 		return (
 			<div>
 				<OekakiHeader
-					handleSave={::this.handleSave}
-					handleReplay={::this.handleReplay}
+					{...{
+						stage,
+						oekaki,
+						history
+					}}
 				/>
 
 				<OekakiTool
@@ -169,17 +173,6 @@ export class OekakiCanvas extends React.Component {
 	}
 	handleChangeLayers(layers) {
 		this.props.stage.changeLayers({layers})
-	}
-
-	handleReplay() {
-		const { stage, oekaki } = this.props
-		this.props.history.changeHistory(JSON.parse(localStorage['draw']))
-		this.props.history.repeat({stage, oekaki})
-		// this.props.stage.setLayer({layerNum: parseInt(e.target.value)})
-	}
-
-	handleSave() {
-		this.props.history.save({stage: this.props.stage})
 	}
 
 	handleRemoveLayer(e) {

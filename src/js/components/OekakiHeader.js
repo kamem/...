@@ -6,19 +6,30 @@ import styles from '../../css/oekakiHeader.css'
 
 export default class OekakiHeader extends React.Component {
   static propTypes = {
-    handleSave: React.PropTypes.func.isRequired,
-    handleReplay: React.PropTypes.func.isRequired,
+    stage: React.PropTypes.object,
+    oekaki: React.PropTypes.object,
+    history: React.PropTypes.object,
   }
   render () {
-    const { handleSave, handleReplay } = this.props
     return (
       <header className={styles.header}>
         <ul className={styles.menu}>
-          <MenuItem onClick={handleSave} iconName='fa-save'>保存</MenuItem>
-          <MenuItem onClick={handleReplay} iconName='fa-play-circle'>再生</MenuItem>
+          <MenuItem onClick={::this.handleSave} iconName='fa-save'>保存</MenuItem>
+          <MenuItem onClick={::this.handleReplay} iconName='fa-play-circle'>再生</MenuItem>
         </ul>
       </header>
     )
+  }
+
+  handleReplay() {
+    const { stage, oekaki } = this.props
+    this.props.history.changeHistory(JSON.parse(localStorage['draw']))
+    this.props.history.repeat({stage, oekaki})
+    // this.props.stage.setLayer({layerNum: parseInt(e.target.value)})
+  }
+
+  handleSave() {
+    this.props.history.save({stage: this.props.stage})
   }
 }
 
