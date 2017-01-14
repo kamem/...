@@ -3,10 +3,10 @@ import * as ActionTypes from '../actions/OekakiCanvasActions'
 const initialState = {
   stage: {},
   oekaki: {},
+  history: {},
   mini: {},
   miniOekaki: {},
   layers: [],
-  history: []
 }
 
 export default function OekakiCanvasActionsReducer (state = initialState, action) {

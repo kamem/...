@@ -46,15 +46,16 @@ export class History {
 			if(data[i].moveLayer) {
 				setTimeout(() => {
 					const [from, to] = data[count].moveLayer
-					count++;
+					count++
 					stage.moveLayer({from, to}, false)
+					oekaki.load()
 				}, speed * i);
 			} else {
 				setTimeout(() => {
 					const [layerNum, pointX, pointY, fillStyle] = data[count];
 					stage.setLayer({layerNum})
 
-					count++;
+					count++
 
 					stage.changeStagePxColor({
 						pointX,

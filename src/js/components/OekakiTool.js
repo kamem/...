@@ -47,14 +47,15 @@ export default class OekakiTool extends React.Component {
     case 'dropper':
       break
     case 'zoomIn':
+      updateCanvas()
       break
     case 'zoomOut':
+      updateCanvas()
       break
     }
 
     oekaki.changeMode({mode: name})
     changeOekaki(oekaki)
-    updateCanvas()
     changeStage(stage)
   }
 }

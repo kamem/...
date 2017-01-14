@@ -12,7 +12,7 @@ export default class OekakiColor extends React.Component {
     oekaki: React.PropTypes.object.isRequired,
   }
   render () {
-    const { handleChangeColor, color } = this.props
+    const { color } = this.props
     return (
       <section className={styles.color}>
         <h2 className={styles.title}>カラー</h2>
@@ -20,7 +20,6 @@ export default class OekakiColor extends React.Component {
       </section>
     )
   }
-
 
   handleChangeColor(colors) {
     console.log(colors);
