@@ -78,6 +78,8 @@ export class OekakiCanvas extends React.Component {
 					}}
 				/>
 
+				<p><img src={history.gif} /></p>
+
 				<LayerContainer
 					handleChangeVisible={::this.handleChangeVisible}
 					handleBlendMode={::this.handleBlendMode}
@@ -101,10 +103,22 @@ export class OekakiCanvas extends React.Component {
 	}
 
 	componentDidMount() {
+		const {
+			changeStage,
+			changeMini,
+			changeOekaki,
+			changeMiniOekaki,
+			changeHistory
+			} = this.props.OekakiCanvasActions
+
 		const $el = $(`.${styles.oekaki}`)
 		const $mini = $(`.${styles.mini}`)
 
-		const history = new History({})
+		const history = new History({
+			replayCompleteFunction: function() {
+				changeHistory(this)
+			}
+		})
 
 		const stage = new Stage({el: $el, history})
 		const mini = new Stage({el: $mini})
@@ -154,13 +168,6 @@ export class OekakiCanvas extends React.Component {
 			//oekaki.repeat({});
 		}
 
-		const {
-			changeStage,
-			changeMini,
-			changeOekaki,
-			changeMiniOekaki,
-			changeHistory
-		} = this.props.OekakiCanvasActions
 		changeStage(stage)
 		changeMini(mini)
 		changeOekaki(oekaki)

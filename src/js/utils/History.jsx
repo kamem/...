@@ -1,11 +1,13 @@
 export class History {
-	constructor({repeatSpeed = 10}) {
+	constructor({repeatSpeed = 10, replayCompleteFunction = false}) {
 		this.data = []
 		this.repeatSpeed = repeatSpeed
+		this.replayCompleteFunction = replayCompleteFunction
 	}
 
 	changeHistory(data) {
 		this.data = data
+		this.gif = ''
 	}
 
 	moveLayerHistory(from, to) {
@@ -14,14 +16,16 @@ export class History {
 	}
 
 	addDrawHistory({stage, oekaki, action}) {
-		const lastHistory = this.data[this.data.length - 1];
 		const { pointX, pointY, fillStyle } = oekaki
+
+		const lastHistory = this.data[this.data.length - 1]
+
 		if(
 			this.data.length === 0 ||
-			lastHistory.layerNum !== stage.layerNum ||
-			lastHistory.pointX !== pointX ||
-			lastHistory.pointY !== pointY ||
-			lastHistory.fillStyle !== fillStyle
+			lastHistory[0] !== stage.layerNum ||
+			lastHistory[1] !== pointX ||
+			lastHistory[2] !== pointY ||
+			lastHistory[3] !== fillStyle
 		) {
 			this.data.push([
 				stage.layerNum,
@@ -40,15 +44,20 @@ export class History {
 	}) {
 		oekaki.clear()
 
+		const encoder = new GIFEncoder();
+		encoder.setDelay(0);
+		console.log(encoder.start());
+
 		let count = 0;
 		for(let i = 0;i < data.length; i++) {
-
 			if(data[i].moveLayer) {
 				setTimeout(() => {
 					const [from, to] = data[count].moveLayer
 					count++
 					stage.moveLayer({from, to}, false)
 					oekaki.load()
+
+					console.log(encoder.addFrame(stage.ctx));
 				}, speed * i);
 			} else {
 				setTimeout(() => {
@@ -64,6 +73,15 @@ export class History {
 					})
 
 					oekaki.draw({pointX, pointY, fillStyle});
+
+					console.log(encoder.addFrame(stage.ctx));
+
+					if(data.length === count) {
+						encoder.finish();
+						this.gif = 'data:image/gif;base64,' + encode64(encoder.stream().getData())
+
+						if(this.replayCompleteFunction) this.replayCompleteFunction()
+					}
 
 					if(oekaki.drawingFunction) oekaki.drawingFunction()
 				}, speed * i);
