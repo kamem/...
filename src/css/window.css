@@ -1,0 +1,6 @@
+@import "./settings";
+@import "./common";
+
+.title {
+    @extend oekaki-ui-title
+}

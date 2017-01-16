@@ -9,10 +9,6 @@
     box-shadow: var(--ui-box-shadow);
 }
 
-.title {
-    @extend oekaki-ui-title
-}
-
 .header {
     padding: 2px 5px;
     display: flex;

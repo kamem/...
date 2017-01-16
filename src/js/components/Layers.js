@@ -45,8 +45,8 @@ export default class Layers extends React.Component {
 									this.props.handleMoveLayer({from, to})
 									this.props.handleChangeLayer(to)
 									this.props.updateCanvas()
-								}}
-							>
+									}}
+								>
 								{''}
 							</DragItem>
 						)

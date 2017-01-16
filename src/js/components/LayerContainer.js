@@ -5,6 +5,7 @@ import {Panel as ColorPickerPanel} from 'rc-color-picker';
 import Layers from './Layers';
 import BlendMode from './BlendMode';
 import LayerOperation from './LayerOperation';
+import OekakiWindow from './OekakiWindow';
 
 // css
 import styles from '../../css/layerContainer.css'
@@ -39,8 +40,7 @@ export default class LayerContainer extends React.Component {
 		} = this.props
 
 		return (
-			<section className={styles.container}>
-				<h2 className={styles.title}>レイヤー</h2>
+			<OekakiWindow title="レイヤー" className={styles.container}>
 				<header className={styles.header}>
 					<BlendMode
 						handleBlendMode={handleBlendMode}
@@ -69,7 +69,7 @@ export default class LayerContainer extends React.Component {
 						handleRemoveLayer
 					}}
 				/>
-			</section>
+			</OekakiWindow>
 		);
 	}
 }

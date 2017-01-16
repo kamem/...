@@ -6,6 +6,7 @@ import styles from '../../css/oekakiColor.css'
 
 // Components
 import {Panel as ColorPickerPanel} from 'rc-color-picker';
+import OekakiWindow from './OekakiWindow';
 
 export default class OekakiColor extends React.Component {
   static propTypes = {
@@ -14,10 +15,9 @@ export default class OekakiColor extends React.Component {
   render () {
     const { color } = this.props
     return (
-      <section className={styles.color}>
-        <h2 className={styles.title}>カラー</h2>
+      <OekakiWindow title="カラー" className={styles.color}>
         <ColorPickerPanel color={color} style={{margin: '10px auto'}} onChange={::this.handleChangeColor} mode="RGB"/>
-      </section>
+      </OekakiWindow>
     )
   }
 
