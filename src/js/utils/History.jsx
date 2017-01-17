@@ -3,37 +3,69 @@ export class History {
 		this.data = []
 		this.repeatSpeed = repeatSpeed
 		this.replayCompleteFunction = replayCompleteFunction
+		this.gif = ''
+		this.drawData = []
+
+		this.delay = 0
+		this.count = 0
 	}
 
 	changeHistory(data) {
 		this.data = data
-		this.gif = ''
 	}
 
-	moveLayerHistory(from, to) {
+	addMoveLayerHistory(from, to) {
 		console.log(from, to);
 		this.data.push({moveLayer: [from, to]})
+	}
+
+	clearDrawHistory() {
+		this.drawData = []
+	}
+
+	addAllDrawHistory() {
+		this.data.push({draw: this.drawData})
 	}
 
 	addDrawHistory({stage, oekaki, action}) {
 		const { pointX, pointY, fillStyle } = oekaki
 
-		const lastHistory = this.data[this.data.length - 1]
+		const lastHistory = this.drawData[this.drawData.length - 1]
 
 		if(
-			this.data.length === 0 ||
+			this.drawData.length === 0 ||
 			lastHistory[0] !== stage.layerNum ||
 			lastHistory[1] !== pointX ||
 			lastHistory[2] !== pointY ||
 			lastHistory[3] !== fillStyle
 		) {
-			this.data.push([
+			this.drawData.push([
 				stage.layerNum,
 				pointX,
 				pointY,
 				fillStyle
 			])
 		}
+	}
+
+	setEvents(action, delay) {
+		this.delay += this.repeatSpeed
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				this.count++
+				action()
+
+				if(this.delay - this.count * this.repeatSpeed === 0) {
+					console.log('replay finish!');
+					//encoder.finish();
+					//this.gif = 'data:image/gif;base64,' + encode64(encoder.stream().getData())
+
+					if(this.replayCompleteFunction) this.replayCompleteFunction()
+				}
+
+				resolve()
+			}, delay)
+		});
 	}
 
 	repeat({
@@ -48,43 +80,36 @@ export class History {
 		encoder.setDelay(0);
 		console.log(encoder.start());
 
-		let count = 0;
+		this.count = 0
+		this.delay = 0
 		for(let i = 0;i < data.length; i++) {
-			if(data[i].moveLayer) {
-				setTimeout(() => {
-					const [from, to] = data[count].moveLayer
-					count++
+			const action = data[i];
+
+			if(action.moveLayer) {
+				this.setEvents(() => {
+					const [from, to] = action.moveLayer
 					stage.moveLayer({from, to}, false)
 					oekaki.load()
 
-					console.log(encoder.addFrame(stage.ctx));
-				}, speed * i);
-			} else {
-				setTimeout(() => {
-					const [layerNum, pointX, pointY, fillStyle] = data[count];
-					stage.setLayer({layerNum})
+					//encoder.addFrame(stage.ctx)
+				}, this.delay).then(() => console.log('layer change!', action.moveLayer))
+			} else if(action.draw) {
+				action.draw.forEach((draw) => {
+					this.setEvents(() => {
+						const [layerNum, pointX, pointY, fillStyle] = draw;
+						stage.setLayer({layerNum})
 
-					count++
+						stage.changeStagePxColor({
+							pointX,
+							pointY,
+							color: fillStyle
+						})
 
-					stage.changeStagePxColor({
-						pointX,
-						pointY,
-						color: fillStyle
-					})
+						oekaki.draw({pointX, pointY, fillStyle});
 
-					oekaki.draw({pointX, pointY, fillStyle});
-
-					console.log(encoder.addFrame(stage.ctx));
-
-					if(data.length === count) {
-						encoder.finish();
-						this.gif = 'data:image/gif;base64,' + encode64(encoder.stream().getData())
-
-						if(this.replayCompleteFunction) this.replayCompleteFunction()
-					}
-
-					if(oekaki.drawingFunction) oekaki.drawingFunction()
-				}, speed * i);
+						//encoder.addFrame(stage.ctx)
+					}, this.delay).then(() => console.log('draw!', draw))
+				})
 			}
 		}
 	}

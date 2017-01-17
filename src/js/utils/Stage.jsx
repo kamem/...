@@ -107,7 +107,7 @@ export class Stage {
 
     this.changeLayers({layers: this.layers})
 
-    if(isSetHistory) this.history.moveLayerHistory(from, to)
+    if(isSetHistory) this.history.addMoveLayerHistory(from, to)
   }
 
   changeLayers({layers, color} = {}) {

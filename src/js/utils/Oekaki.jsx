@@ -117,6 +117,7 @@ export class Oekaki {
       const touchEvent = isMobile ? e.originalEvent.touches[0] : e
 
       this.changeDrawing(true)
+      this.history.clearDrawHistory()
       this.getEvent(touchEvent.pageX, touchEvent.pageY)
     })
     .on(EVENT_TYPE.touchMove, (e) => {
@@ -129,6 +130,7 @@ export class Oekaki {
     })
     .on(EVENT_TYPE.touchEnd, (e) => {
       this.changeDrawing(false)
+      this.history.addAllDrawHistory()
 
       if(this.endFunction) this.endFunction()
     })
