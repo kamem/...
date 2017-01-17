@@ -64,9 +64,7 @@ export class OekakiCanvas extends React.Component {
 				/>
 
 				<div className={styles.stage}>
-					<div className={classNames(styles.oekaki, styles[mode])} style={{
-						width, height
-					}}></div>
+					<div className={classNames(styles.oekaki, styles[mode])} style={{}}></div>
 				</div>
 
 				<div className={styles.mini}></div>
