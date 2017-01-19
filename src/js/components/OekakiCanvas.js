@@ -107,7 +107,7 @@ export class OekakiCanvas extends React.Component {
 			changeOekaki,
 			changeMiniOekaki,
 			changeHistory
-			} = this.props.OekakiCanvasActions
+		} = this.props.OekakiCanvasActions
 
 		const $el = $(`.${styles.oekaki}`)
 		const $mini = $(`.${styles.mini}`)

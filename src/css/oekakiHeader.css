@@ -6,14 +6,25 @@
   width: 100%;
   top: 0;
   left: 0;
+  z-index: 8;
 }
 
 .menu {
   display: flex;
   height: var(--header-height);
   line-height: var(--header-height);
+  position: relative;
 }
 
+.menu_child {
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
+  background-color: var(--base-color);
+  display: none;
+}
+
+.menu_child_item,
 .item {
   padding: 0 13px;
   color: #fff;
@@ -22,6 +33,10 @@
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.3);
+
+    .menu_child {
+      display: block;
+    }
   }
 }
 

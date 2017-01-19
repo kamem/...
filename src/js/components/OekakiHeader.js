@@ -1,6 +1,9 @@
 import React from 'react'
 import classNames from 'classnames'
 
+// utils
+import { downloadPng } from '../utils/Save'
+
 // css
 import styles from '../../css/oekakiHeader.css'
 
@@ -14,7 +17,12 @@ export default class OekakiHeader extends React.Component {
     return (
       <header className={styles.header}>
         <ul className={styles.menu}>
-          <MenuItem onClick={::this.handleSave} iconName='fa-save'>保存</MenuItem>
+          <MenuItem iconName='fa-save'>ファイル
+            <ul className={styles.menu_child}>
+              <MenuItem onClick={::this.handleSave} iconName='fa-window-maximize'>アドレスに保存</MenuItem>
+              <MenuItem onClick={::this.handleSavePng} iconName='fa-download'>pngで書き出し</MenuItem>
+            </ul>
+          </MenuItem>
           <MenuItem onClick={::this.handleReplay} iconName='fa-play-circle'>再生</MenuItem>
         </ul>
       </header>
@@ -31,11 +39,15 @@ export default class OekakiHeader extends React.Component {
   handleSave() {
     this.props.history.save({stage: this.props.stage})
   }
+
+  handleSavePng() {
+    downloadPng(this.props.stage)
+  }
 }
 
 class MenuItem extends React.Component {
   static propTypes = {
-    onClick: React.PropTypes.func.isRequired,
+    onClick: React.PropTypes.func,
     iconName: React.PropTypes.string.isRequired,
   }
   render () {
