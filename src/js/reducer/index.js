@@ -1,8 +1,10 @@
-import { combineReducers } from 'redux';
-import OekakiCanvasActionsReducer from './OekakiCanvasActionsReducer';
+import { combineReducers } from 'redux'
+import OekakiCanvasActionsReducer from './OekakiCanvasActionsReducer'
+import ConfirmModalActionsReducer from './ConfirmModalActionsReducer'
 
 const rootReducer = combineReducers({
-    OekakiCanvasActionsReducer
+    OekakiCanvasActionsReducer,
+    ConfirmModalActionsReducer
 });
 
 export default rootReducer;

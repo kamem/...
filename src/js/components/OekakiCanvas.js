@@ -12,6 +12,7 @@ import { Oekaki } from '../utils/Oekaki'
 
 // Actions
 import * as OekakiCanvasActions from '../actions/OekakiCanvasActions';
+import * as ConfirmModalActions from '../actions/ConfirmModalActions';
 
 // Components
 import OekakiHeader from './OekakiHeader';
@@ -79,21 +80,12 @@ export class OekakiCanvas extends React.Component {
 				<p><img src={history.gif} /></p>
 
 				<LayerContainer
-					handleChangeVisible={::this.handleChangeVisible}
-					handleBlendMode={::this.handleBlendMode}
-					handleChangeAlpha={::this.handleChangeAlpha}
-
-					handleChangeLayer={::this.handleChangeLayer}
-					handleMoveLayer={::this.handleMoveLayer}
-					handleChangeLayers={::this.handleChangeLayers}
-
-					handleNewLayer={::this.handleNewLayer}
-					handleRemoveLayer={::this.handleRemoveLayer}
-
 					updateCanvas={::this.updateCanvas}
 					{...{
+						stage,
 						layers,
-						layerNum
+						layerNum,
+						changeStage
 					}}
 				/>
 			</div>
@@ -173,62 +165,6 @@ export class OekakiCanvas extends React.Component {
 		changeHistory(history)
 	}
 
-	handleMoveLayer(fromTo) {
-		this.props.stage.moveLayer(fromTo)
-	}
-	handleChangeLayers(layers) {
-		this.props.stage.changeLayers({layers})
-	}
-
-	handleRemoveLayer(e) {
-		const {
-			stage,
-			OekakiCanvasActions: { changeStage }
-		} = this.props
-		stage.removeLayer({})
-		changeStage(stage)
-		this.updateCanvas()
-	}
-
-	handleNewLayer(e) {
-		const {
-			stage,
-			OekakiCanvasActions: { changeStage }
-		} = this.props
-		stage.createNewLayer()
-		changeStage(stage)
-	}
-
-	handleChangeLayer(layerNum) {
-		const {
-			stage,
-			OekakiCanvasActions: { changeStage }
-			} = this.props
-		stage.setLayer({layerNum})
-		changeStage(stage)
-	}
-
-	handleChangeVisible(layerNum) {
-		const {
-			stage: {
-				layers
-			},
-		} = this.props
-		this.props.stage.changeVisible({isVisible: !layers[layerNum].isVisible, layerNum})
-		this.updateCanvas()
-	}
-
-	handleChangeAlpha(e) {
-		this.props.stage.changeAlpha({alpha: parseFloat(e.target.value / 100)})
-		this.updateCanvas()
-	}
-
-	handleBlendMode(e) {
-		console.log(e.target.value);
-		this.props.stage.changeBlendMode({blendMode: parseInt(e.target.value)})
-		this.updateCanvas()
-	}
-
 	updateCanvas(mainUpdate = true) {
 		if(mainUpdate) this.props.oekaki.load()
 		this.props.miniOekaki.load()
@@ -248,6 +184,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return {
 		OekakiCanvasActions: bindActionCreators(OekakiCanvasActions, dispatch),
+		ConfirmModalActions: bindActionCreators(ConfirmModalActions, dispatch),
 	};
 }
 

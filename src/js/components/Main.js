@@ -6,12 +6,16 @@ import { connect } from 'react-redux';
 // Actions
 import * as OekakiCanvasActions from '../actions/OekakiCanvasActions';
 
+// Components
+import ConfirmModal from './common/ConfirmModal';
+
 class Main extends React.Component {
 	render() {
 		return (
 			<main id="main">
 				<article>
 					{this.props.children}
+					<ConfirmModal />
 				</article>
 			</main>
 		);
@@ -19,9 +23,7 @@ class Main extends React.Component {
 }
 
 function mapStateToProps(state) {
-	return {
-		OekakiCanvasActionsReducer : state.OekakiCanvasActionsReducer,
-	};
+	return {};
 }
 
 function mapDispatchToProps(dispatch) {

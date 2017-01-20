@@ -1,0 +1,55 @@
+@import "./settings";
+
+:root {
+  --btn-icon-width: 40px;
+  --btn-icon-height: 40px;
+  --btn-icon-size: 14px;
+}
+
+.btn_list {
+	margin-right: 10px;
+	display: inline-block;
+  cursor: pointer;
+	&:last-child {
+		margin-right: 0;
+	}
+}
+
+.btn {
+	display: inline-block;
+	font-size: 13px;
+	padding: 8.5px 15px;
+	color: #fff;
+	border-radius: 4px;
+	text-decoration: none;
+	box-sizing: border-box;
+  background-color: var(--btn-color);
+  cursor: pointer;
+  border: none;
+
+	&:hover {
+		opacity: .7;
+	}
+}
+
+.delete:not([disabled]) {
+  background-color: #fff;
+  background-color: var(--btn-warning-color);
+}
+
+.large {
+  padding: 21px 5px;
+  font-size: 16px;
+}
+
+.center {
+  text-align: center;
+}
+
+[disabled] {
+  background-color: #ccc;
+  cursor: default;
+  &:hover {
+    opacity: 1;
+  }
+}

@@ -6,4 +6,7 @@
     --icon-color: #ccc;
 
     --guide-width: 240px;
+
+    --btn-color: var(--base-color);
+    --btn-warning-color: red;
 }

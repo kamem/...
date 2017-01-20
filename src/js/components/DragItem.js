@@ -10,7 +10,6 @@ import { Stage } from '../utils/Stage'
 import { Oekaki } from '../utils/Oekaki'
 
 @DropTarget("item", {
-	// drop 時のコールバック
 	drop(dropProps, monitor, dropComponent) {
 		const dragProps = monitor.getItem();
 		if (dropProps.id !== dragProps.id) {
