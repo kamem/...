@@ -94,6 +94,7 @@ export default class OekakiHistories extends React.Component {
 			callback: () => {
 				history.removeAllData()
 				this.props.updateHistory()
+				this.props.updateCanvas()
 			}
 		})
 	}
