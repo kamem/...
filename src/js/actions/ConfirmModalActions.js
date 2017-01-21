@@ -1,9 +1,10 @@
 export const SHOW_CONFIRM_MODAL = "SHOW_CONFIRM_MODAL"
 export const HIDE_CONFIRM_MODAL = "HIDE_CONFIRM_MODAL"
 
-export function showModal({title, body, callback, showCancelBtn = true}) {
+export function showModal({size, title, body, callback, showCancelBtn = true}) {
     return {
         type : SHOW_CONFIRM_MODAL,
+        size,
         title,
         body,
         callback,
