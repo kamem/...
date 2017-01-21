@@ -2,32 +2,84 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 import classNames from 'classnames'
 
+import { EVENT_TYPE, isMobile } from '../utils/Helper'
+
 // css
 import styles from '../../css/window.css'
 
 export default class OekakiWindow extends React.Component {
   static propTypes = {
-    className: React.PropTypes.string.isRequired,
+    className: React.PropTypes.string,
     title: React.PropTypes.string.isRequired,
+    x: React.PropTypes.number,
+    y: React.PropTypes.number,
   }
   render () {
+    const { left, top } = this.state
     return (
-      <section className={this.props.className} ref="window">
+      <section className={classNames(styles.container, this.props.className)} ref="window"
+               style={{left: `${left}px`, top: `${top}px`}}>
         <h2 className={styles.title} ref="title"
-            onMouseDown={::this.down}
-            onMouseUp={::this.down}>{this.props.title}</h2>
+            onMouseDown={::this.mouseDown}
+            onMouseUp={::this.mouseUp}>{this.props.title}</h2>
         {this.props.children}
       </section>
     )
   }
 
+  componentWillMount() {
+    const { left, top } = this.props
+    this.setState({
+      isMove: false,
+      startEleX: left,
+      startEleY: top,
+      left,
+      top
+    })
+  }
+
+  getPosition({x, y, startX = this.state.startX, startY = this.state.startY}) {
+    const moveX = x - startX
+    const moveY = y - startY
+    return {
+      left: this.state.startEleX + moveX,
+      top: this.state.startEleY + moveY
+    }
+  }
+
   componentDidMount() {
-    ReactDOM.findDOMNode(this.refs.title).addEventListener('mousedown', () => {
-      console.log(ReactDOM.findDOMNode(this.refs.window))
+    const window = ReactDOM.findDOMNode(this.refs.window);
+    window.addEventListener(EVENT_TYPE.touchStart, (e) => {
+      const touchEvent = isMobile ? e.originalEvent.touches[0] : e
+        this.setState({
+          startX: touchEvent.pageX,
+          startY: touchEvent.pageY,
+        })
+      })
+    window.addEventListener(EVENT_TYPE.touchMove, (e) => {
+      //console.log(ReactDOM.findDOMNode(this.refs.window))
+      const touchEvent = isMobile ? e.originalEvent.touches[0] : e
+      if(this.state.isMove) {
+        this.setState({
+          ...this.getPosition({x: touchEvent.pageX, y: touchEvent.pageY})
+        })
+      }
     });
   }
 
-  down(e) {
-    console.log(e,ReactDOM.findDOMNode(this.refs.window).style.left);
+  mouseDown(e) {
+    const { left, top } = ReactDOM.findDOMNode(this.refs.window).style
+
+    this.setState({
+      isMove: true,
+      startEleX: parseInt(left),
+      startEleY: parseInt(top)
+    })
+  }
+
+  mouseUp(e) {
+    this.setState({
+      isMove: false
+    })
   }
 }

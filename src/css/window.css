@@ -1,6 +1,18 @@
 @import "./settings";
-@import "./common";
+
+.container {
+    background-color: var(--base-color);
+    position: fixed;
+    width: var(--guide-width);
+    z-index: 1;
+    box-shadow: var(--ui-box-shadow);
+}
 
 .title {
-    @extend oekaki-ui-title
+    background-color: #535353;
+    color: #fff;
+    font-weight: normal;
+    font-size: 11px;
+    padding: 2px 5px;
+    cursor: all-scroll;
 }

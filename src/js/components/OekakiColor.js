@@ -15,7 +15,7 @@ export default class OekakiColor extends React.Component {
   render () {
     const { color } = this.props
     return (
-      <OekakiWindow title="カラー" className={styles.color}>
+      <OekakiWindow title="カラー" className={styles.color} left={10} top={200}>
         <ColorPickerPanel color={color} style={{margin: '10px auto'}} onChange={::this.handleChangeColor} mode="RGB"/>
       </OekakiWindow>
     )

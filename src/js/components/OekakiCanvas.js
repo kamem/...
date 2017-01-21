@@ -19,6 +19,7 @@ import OekakiHeader from './OekakiHeader';
 import OekakiTool from './OekakiTool';
 import OekakiColor from './OekakiColor';
 import LayerContainer from './LayerContainer';
+import OekakiHistories from './OekakiHistories';
 
 // css
 import styles from '../../css/oekaki.css'
@@ -40,6 +41,9 @@ export class OekakiCanvas extends React.Component {
 				color
 			},
 			history,
+			history: {
+				data: histories
+			},
 			OekakiCanvasActions: { changeOekaki, changeStage }
 		} = this.props
 
@@ -86,6 +90,13 @@ export class OekakiCanvas extends React.Component {
 						layers,
 						layerNum,
 						changeStage
+					}}
+				/>
+
+				<OekakiHistories
+					{...{
+						history,
+						histories
 					}}
 				/>
 			</div>

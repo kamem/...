@@ -1,16 +1,6 @@
 @import "./settings";
 @import "./common";
 
-.color {
-  background-color: var(--base-color);
-  position: fixed;
-  width: var(--guide-width);
-  top: 200px;
-  left: 10px;
-  z-index: 1;
-  box-shadow: var(--ui-box-shadow);
-}
-
 .clorPicker {
   margin: 0 auto;
 }

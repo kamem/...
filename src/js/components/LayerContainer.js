@@ -25,7 +25,7 @@ export default class LayerContainer extends React.Component {
 		} = this.props
 
 		return (
-			<OekakiWindow title="レイヤー" className={styles.container}>
+			<OekakiWindow title="レイヤー" className={styles.container} left={800} top={500}>
 				<header className={styles.header}>
 					<BlendMode
 						handleBlendMode={::this.handleBlendMode}

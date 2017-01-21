@@ -1,14 +1,6 @@
 @import "./settings";
 @import "./common";
 
-.container {
-    width: var(--guide-width);
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    box-shadow: var(--ui-box-shadow);
-}
-
 .header {
     padding: 2px 5px;
     display: flex;
