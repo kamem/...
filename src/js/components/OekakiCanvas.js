@@ -20,6 +20,7 @@ import OekakiTool from './OekakiTool';
 import OekakiColor from './OekakiColor';
 import LayerContainer from './LayerContainer';
 import OekakiHistories from './OekakiHistories';
+import ActualSize from './ActualSize';
 
 // css
 import styles from '../../css/oekaki.css'
@@ -76,7 +77,7 @@ export class OekakiCanvas extends React.Component {
 					<div className={classNames(styles.oekaki, styles[mode])} style={{}}></div>
 				</div>
 
-				<div className={styles.mini}></div>
+				<ActualSize />
 
 				<OekakiColor
 					{...{
@@ -99,6 +100,7 @@ export class OekakiCanvas extends React.Component {
 
 				<OekakiHistories
 					updateHistory={() => changeHistory(history)}
+					updateCanvas={::this.updateCanvas}
 					showConfirmModal={showModal}
 					handleReplay={::this.handleReplay}
 					{...{
