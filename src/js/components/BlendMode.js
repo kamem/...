@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import classNames from 'classnames'
 
-// utils
+// constant
 import { BLEND_MODE } from '../utils/BlendMode'
 
 // css
