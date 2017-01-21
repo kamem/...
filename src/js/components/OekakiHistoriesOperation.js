@@ -4,17 +4,15 @@ import classNames from 'classnames'
 // css
 import styles from '../../css/operation.css'
 
-export default class LayerOopetation extends React.Component {
+export default class OekakiHistoriesOopetation extends React.Component {
   static propTypes = {
-    handleNewLayer: React.PropTypes.func.isRequired,
-    handleRemoveLayer: React.PropTypes.func.isRequired,
+    handleRemoveAllHistories: React.PropTypes.func.isRequired,
   }
   render () {
-    const { handleNewLayer, handleRemoveLayer } = this.props
+    const { handleRemoveAllHistories } = this.props
     return (
       <ul className={styles.opetation}>
-        <Opetation onClick={handleNewLayer} iconName='fa-file-o'></Opetation>
-        <Opetation onClick={handleRemoveLayer} iconName='fa-trash'></Opetation>
+        <Opetation onClick={handleRemoveAllHistories} iconName='fa-trash'></Opetation>
       </ul>
     )
   }

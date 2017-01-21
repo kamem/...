@@ -30,9 +30,9 @@ export default class OekakiHeader extends React.Component {
   }
 
   handleReplay() {
-    const { stage, oekaki } = this.props
-    this.props.history.changeHistory(JSON.parse(localStorage['draw']))
-    this.props.history.repeat({stage, oekaki})
+    const { stage, oekaki, history } = this.props
+    history.changeHistory(JSON.parse(localStorage['draw']))
+    history.repeat({stage, oekaki})
     // this.props.stage.setLayer({layerNum: parseInt(e.target.value)})
   }
 
