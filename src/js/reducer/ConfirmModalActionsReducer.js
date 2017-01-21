@@ -13,6 +13,7 @@ export default function ConfirmModalActionsReducer(state = initialState, action)
         case ActionTypes.SHOW_CONFIRM_MODAL :
             return  Object.assign({}, state, {
                 isVisible: true,
+                size: action.size,
                 title: action.title,
                 body: action.body,
                 callback: action.callback || function() {},

@@ -1,4 +1,38 @@
 @import "./settings";
 
-.container {
+.histories {
+    background-color: var(--base-color);
+    overflow: auto;
+    height: 160px;
+    box-shadow: var(--ui-inset-box-shadow);
+    position: relative;
+}
+
+.history {
+    padding: 3px 5px;
+    margin-bottom: 1px;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    display: flex;
+    font-size: 11px;
+    color: #fff;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.selected {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.nonActive {
+    opacity: 0.5;
+}
+
+.not_found {
+    margin: 10px;
+    color: #fff;
+    font-size: 11px;
 }

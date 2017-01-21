@@ -42,9 +42,13 @@ export class OekakiCanvas extends React.Component {
 			},
 			history,
 			history: {
-				data: histories
+				data: histories,
+				activeData: activeHistories,
+				nonActiveData: nonActiveHistories,
+				selectedHistoryNum
 			},
-			OekakiCanvasActions: { changeOekaki, changeStage }
+			OekakiCanvasActions: { changeOekaki, changeStage, changeHistory },
+			ConfirmModalActions: { showModal }
 		} = this.props
 
 		return (
@@ -94,9 +98,15 @@ export class OekakiCanvas extends React.Component {
 				/>
 
 				<OekakiHistories
+					updateHistory={() => changeHistory(history)}
+					showConfirmModal={showModal}
+					handleReplay={::this.handleReplay}
 					{...{
 						history,
-						histories
+						selectedHistoryNum,
+						histories,
+						activeHistories,
+						nonActiveHistories
 					}}
 				/>
 			</div>
@@ -164,16 +174,24 @@ export class OekakiCanvas extends React.Component {
 
 		oekaki.setDrawEvent()
 
-		if(localStorage['draw']) {
-			history.changeHistory(JSON.parse(localStorage['draw']))
 			//oekaki.repeat({});
-		}
 
 		changeStage(stage)
 		changeMini(mini)
 		changeOekaki(oekaki)
 		changeMiniOekaki(miniOekaki)
 		changeHistory(history)
+	}
+
+
+	handleReplay() {
+		const { stage, oekaki, history,
+				history: {
+					activeData: activeHistories,
+				},
+		} = this.props
+		history.repeat({data: activeHistories, stage, oekaki, isTimeout: false})
+		this.updateCanvas()
 	}
 
 	updateCanvas(mainUpdate = true) {

@@ -12,8 +12,8 @@ export class Stage {
     this.layerNum = -1
     this.canvas = this.$el.append('<canvas class="layer"></canvas>').find('.layer')[0]
 
-    this.createNewLayer('#fff')
-    this.createNewLayer('')
+    this.createNewLayer('#fff', false)
+    this.createNewLayer('', false)
   }
 
   changeSize({
@@ -32,7 +32,7 @@ export class Stage {
     this.canvasHeight = this.height * this.pxHeight
   }
 
-  createNewLayer(color = '') {
+  createNewLayer(color = '', isSetHistory = true) {
     this.layers.splice(this.layerNum + 1, 0, {});
     this.layerNum += 1
     this.changeVisible({})
@@ -41,6 +41,8 @@ export class Stage {
     this.layers[this.layerNum].ary = this.createStageAry(color)
 
     this.setLayer({layerNum: this.layerNum})
+
+    if(this.history && isSetHistory) this.history.addNewLayerHistory(color)
   }
 
   changeVisible({isVisible = true, layerNum = this.layerNum}) {
@@ -124,11 +126,16 @@ export class Stage {
   }
 
   clearAllLayer() {
-    this.layers.forEach((layer, layerNum) => {
-      const color = layerNum === 0 ? '#fff' : '';
+    //this.layers.forEach((layer, layerNum) => {
+    //  const color = layerNum === 0 ? '#fff' : '';
+		//
+    //  this.layers[layerNum].ary = this.createStageAry(color)
+    //})
 
-      this.layers[layerNum].ary = this.createStageAry(color)
-    })
+    this.layers = []
+    this.layerNum = -1
+    this.createNewLayer('#fff', false)
+    this.createNewLayer('', false)
   }
 
   createStageAry(color = '') {
