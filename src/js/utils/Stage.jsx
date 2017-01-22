@@ -42,7 +42,7 @@ export class Stage {
 
     this.setLayer({layerNum: this.layerNum})
 
-    if(this.history && isSetHistory) this.history.addNewLayerHistory(color)
+    if(this.history && isSetHistory) this.history.addNewLayerHistory(this.layerNum)
   }
 
   changeVisible({isVisible = true, layerNum = this.layerNum}) {

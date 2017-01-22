@@ -31,8 +31,8 @@ export class History {
 		this.changeSelectedHistoryNum({selectedHistoryNum: data.length - 1})
 	}
 
-	addNewLayerHistory(color){
-		this.data.push({createNewLayer: color})
+	addNewLayerHistory(layerNum){
+		this.data.push({createNewLayer: layerNum})
 		this.changeSelectedHistoryNum({selectedHistoryNum: this.data.length - 1})
 	}
 
@@ -72,7 +72,13 @@ export class History {
 	}
 
 	setEvents(action, delay, isTimeout = true) {
-		if(!isTimeout) action()
+		if(!isTimeout) {
+			return new Promise((resolve, reject) => {
+				action()
+				resolve()
+			});
+			return
+		}
 
 		this.delay += this.repeatSpeed
 		return new Promise((resolve, reject) => {
@@ -110,8 +116,10 @@ export class History {
 		for(let i = 0;i < data.length; i++) {
 			const action = data[i];
 
-			if(action.createNewLayer) {
+			if(typeof action.createNewLayer !== 'undefined') {
 				this.setEvents(() => {
+					const layerNum = action.createNewLayer
+					stage.setLayer({layerNum : layerNum - 1})
 					stage.createNewLayer('', false)
 				}, this.delay, isTimeout).then(() => console.log('new layer!', action.createNewLayer))
 			} else if(action.moveLayer) {
