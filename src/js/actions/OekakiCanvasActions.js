@@ -22,14 +22,6 @@ export function changeLayers(layers) {
     }
 }
 
-export const CHANGE_MINI = "CHANGE_MINI"
-export function changeMini(stage) {
-    return {
-        type : CHANGE_MINI,
-        stage
-    }
-}
-
 export const CHANGE_OEKAKI = "CHANGE_OEKAKI"
 export function changeOekaki(oekaki) {
     return {
@@ -43,5 +35,13 @@ export function changeMiniOekaki(miniOekaki) {
     return {
         type : CHANGE_MINI_OEKAKI,
         miniOekaki
+    }
+}
+
+export const CHANGE_X_MINI_OEKAKI = "CHANGE_X_MINI_OEKAKI"
+export function changeXminiOekaki(x_miniOekaki) {
+    return {
+        type : CHANGE_X_MINI_OEKAKI,
+        x_miniOekaki
     }
 }

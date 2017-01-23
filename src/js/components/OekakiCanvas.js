@@ -54,13 +54,7 @@ export class OekakiCanvas extends React.Component {
 
 		return (
 			<div>
-				<OekakiHeader
-					{...{
-						stage,
-						oekaki,
-						history
-					}}
-				/>
+				<OekakiHeader {...{ stage, oekaki, history }} />
 
 				<OekakiTool
 					oekakiMode={mode}
@@ -74,17 +68,12 @@ export class OekakiCanvas extends React.Component {
 				/>
 
 				<div className={styles.stage}>
-					<div className={classNames(styles.oekaki, styles[mode])} style={{}}></div>
+					<div className={classNames(styles.oekaki, styles[mode])}></div>
 				</div>
 
 				<ActualSize />
 
-				<OekakiColor
-					{...{
-						oekaki,
-						color
-					}}
-				/>
+				<OekakiColor {...{ oekaki, color }} />
 
 				<p><img src={history.gif} /></p>
 
@@ -118,14 +107,11 @@ export class OekakiCanvas extends React.Component {
 	componentDidMount() {
 		const {
 			changeStage,
-			changeMini,
 			changeOekaki,
 			changeMiniOekaki,
+			changeXminiOekaki,
 			changeHistory
 		} = this.props.OekakiCanvasActions
-
-		const $el = $(`.${styles.oekaki}`)
-		const $mini = $(`.${styles.mini}`)
 
 		const history = new History({
 			replayCompleteFunction: function() {
@@ -133,18 +119,22 @@ export class OekakiCanvas extends React.Component {
 			}
 		})
 
-		const stage = new Stage({el: $el, history})
-		const mini = new Stage({el: $mini})
+		const stage = new Stage({el: $(`.${styles.oekaki}`), history})
+		const mini = new Stage({el: $(`.${styles.mini}`)})
+		const x_mini = new Stage({el: $(`.${styles.x_mini}`)})
 
 		mini.changePxSize({
 			pxWidth: 2,
 			pxHeight: 2,
 		})
-		mini.changeSize({
-			width: 32,
-			height: 32
-		})
+		mini.changeSize({})
 		mini.setLayer({})
+		x_mini.changePxSize({
+			pxWidth: 1,
+			pxHeight: 1,
+		})
+		x_mini.changeSize({})
+		x_mini.setLayer({})
 
 		const search = window.location.search.substring(1,window.location.search.length)
 		const inflateSearch = inflate(search);
@@ -154,34 +144,37 @@ export class OekakiCanvas extends React.Component {
 				JSON.parse(decodeURI(inflateSearch.replace(/%23/g,'#')))
 			})
 			mini.changeLayers({layers: stage.layers})
+			x_mini.changeLayers({layers: stage.layers})
 		}
 		const miniOekaki = new Oekaki({
 			stage: mini
+		})
+		const x_miniOekaki = new Oekaki({
+			stage: x_mini
 		})
 		const oekaki = new Oekaki({
 			stage,
 			history,
 			endFunction: () => {
 				mini.changeLayers({layers: stage.layers})
+				x_mini.changeLayers({layers: stage.layers})
 
-				this.updateCanvas(false)
+				this.updateCanvas({mainUpdate: false})
 
 				//console.log(new RGBColor(oekaki.color));
 				//console.log('test');
 			}
 		});
 
-		oekaki.load()
-		miniOekaki.load()
+		this.updateCanvas({ stage, oekaki, miniOekaki, x_miniOekaki })
 
 		oekaki.setDrawEvent()
 
 			//oekaki.repeat({});
 
-		changeStage(stage)
-		changeMini(mini)
 		changeOekaki(oekaki)
 		changeMiniOekaki(miniOekaki)
+		changeXminiOekaki(x_miniOekaki)
 		changeHistory(history)
 	}
 
@@ -196,19 +189,25 @@ export class OekakiCanvas extends React.Component {
 		this.updateCanvas()
 	}
 
-	updateCanvas(mainUpdate = true) {
-		if(mainUpdate) this.props.oekaki.load()
-		this.props.miniOekaki.load()
-		this.props.OekakiCanvasActions.changeStage(this.props.stage)
+	updateCanvas({
+		stage = this.props.stage,
+		oekaki = this.props.oekaki,
+		miniOekaki = this.props.miniOekaki,
+		x_miniOekaki = this.props.x_miniOekaki,
+		mainUpdate = true
+	} = {}) {
+		if(mainUpdate) oekaki.load()
+		miniOekaki.load()
+		x_miniOekaki.load()
+		this.props.OekakiCanvasActions.changeStage(stage)
 	}
 }
 
 
 function mapStateToProps(state) {
-	const { stage, mini, oekaki, miniOekaki, history } = state.OekakiCanvasActionsReducer;
 	return {
 		OekakiCanvasActionsReducer: state.OekakiCanvasActionsReducer,
-		stage, mini, oekaki, miniOekaki, history
+		...state.OekakiCanvasActionsReducer
 	};
 }
 

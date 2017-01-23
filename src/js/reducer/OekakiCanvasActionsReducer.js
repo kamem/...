@@ -6,6 +6,7 @@ const initialState = {
   history: {},
   mini: {},
   miniOekaki: {},
+  x_miniOekaki: {},
   layers: [],
 }
 
@@ -24,10 +25,6 @@ export default function OekakiCanvasActionsReducer (state = initialState, action
       return Object.assign({}, state, {
         layers: action.layers
       })
-    case ActionTypes.CHANGE_MINI :
-      return Object.assign({}, state, {
-        mini: action.mini
-      })
 
     case ActionTypes.CHANGE_OEKAKI :
       return Object.assign({}, state, {
@@ -37,6 +34,10 @@ export default function OekakiCanvasActionsReducer (state = initialState, action
     case ActionTypes.CHANGE_MINI_OEKAKI :
       return Object.assign({}, state, {
         miniOekaki: action.miniOekaki
+      })
+    case ActionTypes.CHANGE_X_MINI_OEKAKI :
+      return Object.assign({}, state, {
+        x_miniOekaki: action.x_miniOekaki
       })
 
     default :
