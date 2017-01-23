@@ -121,7 +121,7 @@ export class Stage {
   }
 
   removeLayer({layerNum = this.layerNum}) {
-    this.layerNum -= 1
+    this.layerNum = Math.max(0, this.layerNum - 1)
     this.layers.splice(layerNum, 1)
   }
 
