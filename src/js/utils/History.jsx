@@ -14,7 +14,7 @@ export class History {
 		this.selectedHistoryNum = Math.max(0, this.data.length - 1)
 	}
 
-	changeSelectedHistoryNum({selectedHistoryNum}) {
+	changeSelectedHistoryNum({selectedHistoryNum = this.data.length - 1}) {
 		this.selectedHistoryNum = selectedHistoryNum
 
 		this.activeData = this.data.filter((d, i) => {
@@ -28,17 +28,17 @@ export class History {
 	changeHistory(data) {
 		this.data = data
 
-		this.changeSelectedHistoryNum({selectedHistoryNum: data.length - 1})
+		this.changeSelectedHistoryNum({})
 	}
 
 	addNewLayerHistory(layerNum){
 		this.data.push({createNewLayer: layerNum})
-		this.changeSelectedHistoryNum({selectedHistoryNum: this.data.length - 1})
+		this.changeSelectedHistoryNum({})
 	}
 
 	addMoveLayerHistory(from, to) {
 		this.data.push({moveLayer: [from, to]})
-		this.changeSelectedHistoryNum({selectedHistoryNum: this.data.length - 1})
+		this.changeSelectedHistoryNum({})
 	}
 
 	clearDrawHistory() {
