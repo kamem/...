@@ -1,6 +1,10 @@
 @import "./settings";
 @import "./common";
 
+.color {
+  
+}
+
 .clorPicker {
   margin: 0 auto;
 }

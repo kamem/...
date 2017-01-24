@@ -9,7 +9,7 @@ import styles from '../../css/window.css'
 
 export default class OekakiWindow extends React.Component {
   static propTypes = {
-    className: React.PropTypes.string,
+    className: React.PropTypes.string.isRequired,
     title: React.PropTypes.string.isRequired,
     x: React.PropTypes.number,
     y: React.PropTypes.number,
@@ -28,13 +28,20 @@ export default class OekakiWindow extends React.Component {
   }
 
   componentWillMount() {
-    const { left, top } = this.props
+    const { left, top, className } = this.props
+    if(localStorage[className]) {
+      var [ storageLeft, storageTop ]  = localStorage[className].split(',')
+    }
+
+    const x = parseInt(storageLeft) || left;
+    const y = parseInt(storageTop) || top;
+
     this.setState({
       isMove: false,
-      startEleX: left,
-      startEleY: top,
-      left,
-      top
+      startEleX: x,
+      startEleY: y,
+      left: x,
+      top: y,
     })
   }
 
@@ -78,6 +85,10 @@ export default class OekakiWindow extends React.Component {
   }
 
   mouseUp(e) {
+    const { className } = this.props
+    const { left, top } = this.state
+    localStorage[className] = [ left, top ]
+
     this.setState({
       isMove: false
     })

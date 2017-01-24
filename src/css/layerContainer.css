@@ -1,6 +1,10 @@
 @import "./settings";
 @import "./common";
 
+.container {
+  
+}
+
 .header {
     padding: 2px 5px;
     display: flex;
