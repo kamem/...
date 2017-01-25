@@ -15,10 +15,10 @@ export default class OekakiWindow extends React.Component {
     y: React.PropTypes.number,
   }
   render () {
-    const { left, top } = this.state
+    const { left, top, zIndex } = this.state
     return (
       <section className={classNames(styles.container, this.props.className)} ref="window"
-               style={{left: `${left}px`, top: `${top}px`}}>
+               style={{left: `${left}px`, top: `${top}px`, zIndex}}>
         <h2 className={styles.title} ref="title"
             onMouseDown={::this.mouseDown}
             onMouseUp={::this.mouseUp}>{this.props.title}</h2>
@@ -42,6 +42,7 @@ export default class OekakiWindow extends React.Component {
       startEleY: y,
       left: x,
       top: y,
+      zIndex: parseInt(localStorage['window_zindex']) || 0
     })
   }
 
@@ -77,10 +78,13 @@ export default class OekakiWindow extends React.Component {
   mouseDown(e) {
     const { left, top } = ReactDOM.findDOMNode(this.refs.window).style
 
+    const zIndex = ++this.state.zIndex
+    localStorage['window_zindex'] = zIndex
     this.setState({
       isMove: true,
       startEleX: parseInt(left),
-      startEleY: parseInt(top)
+      startEleY: parseInt(top),
+      zIndex
     })
   }
 
