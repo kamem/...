@@ -1,13 +1,20 @@
 import React from 'react'
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'
 import classNames from 'classnames'
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+
+// Actions
+import * as OekakiWindowActions from '../actions/OekakiWindowActions';
+
+// Helper
 import { EVENT_TYPE, isMobile } from '../utils/Helper'
 
 // css
 import styles from '../../css/window.css'
 
-export default class OekakiWindow extends React.Component {
+export class OekakiWindow extends React.Component {
   static propTypes = {
     className: React.PropTypes.string.isRequired,
     title: React.PropTypes.string.isRequired,
@@ -18,7 +25,8 @@ export default class OekakiWindow extends React.Component {
     const { left, top, zIndex } = this.state
     return (
       <section className={classNames(styles.container, this.props.className)} ref="window"
-               style={{left: `${left}px`, top: `${top}px`, zIndex}}>
+               style={{left: `${left}px`, top: `${top}px`, zIndex}}
+               onMouseDown={::this.boxMouseDown}>
         <h2 className={styles.title} ref="title"
             onMouseDown={::this.mouseDown}
             onMouseUp={::this.mouseUp}>{this.props.title}</h2>
@@ -42,7 +50,7 @@ export default class OekakiWindow extends React.Component {
       startEleY: y,
       left: x,
       top: y,
-      zIndex: parseInt(localStorage['window_zindex']) || 0
+      zIndex: parseInt(localStorage[`${className}_zindex`]) || 0
     })
   }
 
@@ -75,16 +83,25 @@ export default class OekakiWindow extends React.Component {
     });
   }
 
+  boxMouseDown(e) {
+    const { zIndex, className, OekakiWindowActions: { changeZindex } } = this.props
+    const z = this.state.zIndex === 0 || this.state.zIndex !== zIndex ? zIndex + 1 : zIndex
+
+    changeZindex(z)
+    localStorage['window_zindex'] = z
+    localStorage[`${className}_zindex`] = z
+    this.setState({
+      zIndex: z
+    })
+  }
+
   mouseDown(e) {
     const { left, top } = ReactDOM.findDOMNode(this.refs.window).style
 
-    const zIndex = ++this.state.zIndex
-    localStorage['window_zindex'] = zIndex
     this.setState({
       isMove: true,
       startEleX: parseInt(left),
       startEleY: parseInt(top),
-      zIndex
     })
   }
 
@@ -98,3 +115,19 @@ export default class OekakiWindow extends React.Component {
     })
   }
 }
+
+
+function mapStateToProps(state) {
+	return {
+		OekakiWindowActionsReducer: state.OekakiWindowActionsReducer,
+		...state.OekakiWindowActionsReducer
+	}
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		OekakiWindowActions: bindActionCreators(OekakiWindowActions, dispatch),
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OekakiWindow)
