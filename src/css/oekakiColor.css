@@ -1,10 +1,36 @@
 @import "./settings";
-@import "./common";
 
-.color {
-  
+.colorContainer {
+
 }
 
 .clorPicker {
   margin: 0 auto;
+}
+
+.colors {
+  &:after {
+    content: '';
+    height: 0;
+    overflow: hidden;
+    clear: both;
+    display: block;
+  }
+}
+
+.color {
+  width: 15px;
+  height: 15px;
+  margin: 0 1px 1px 0;
+  cursor: pointer;
+  box-sizing: border-box;
+  float: left;
+}
+
+.selected {
+  transform: scale(1.5);
+}
+
+.subTitle {
+
 }

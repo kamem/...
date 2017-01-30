@@ -45,3 +45,12 @@ export function changeXminiOekaki(x_miniOekaki) {
         x_miniOekaki
     }
 }
+
+
+export const CHANGE_COLORS = "CHANGE_COLORS"
+export function changeColors(colors) {
+    return {
+        type : CHANGE_COLORS,
+        colors
+    }
+}

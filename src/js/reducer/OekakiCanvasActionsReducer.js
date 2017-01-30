@@ -8,6 +8,7 @@ const initialState = {
   miniOekaki: {},
   x_miniOekaki: {},
   layers: [],
+  colors: []
 }
 
 export default function OekakiCanvasActionsReducer (state = initialState, action) {
@@ -38,6 +39,11 @@ export default function OekakiCanvasActionsReducer (state = initialState, action
     case ActionTypes.CHANGE_X_MINI_OEKAKI :
       return Object.assign({}, state, {
         x_miniOekaki: action.x_miniOekaki
+      })
+
+    case ActionTypes.CHANGE_COLORS :
+      return Object.assign({}, state, {
+        colors: action.colors
       })
 
     default :

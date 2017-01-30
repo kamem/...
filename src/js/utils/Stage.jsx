@@ -57,8 +57,8 @@ export class Stage {
     this.layers[this.layerNum].alpha = alpha;
   }
 
-  changeStagePxColor({pointX, pointY, color}) {
-    this.layers[this.layerNum].ary[pointY][pointX] = color;
+  changeStagePxColor({pointX, pointY, color, layerNum = this.layerNum}) {
+    this.layers[layerNum].ary[pointY][pointX] = color;
   }
 
   getLayerPxColors({
@@ -90,6 +90,35 @@ export class Stage {
     pointY
   }) {
     return this.layers[layerNum].ary[pointY][pointX]
+  }
+
+  getAllColor() {
+    const colors = []
+    this.layers.forEach((layer, layerNum) => {
+      layer.ary.forEach((y) => {
+          y.forEach((x) => {
+            const index = colors.indexOf(x)
+
+            if(x !== '' && index < 0) {
+              colors.push(x)
+            }
+          })
+      })
+    })
+
+    return colors
+  }
+
+  replaceColor(color, color2) {
+    this.layers.forEach((layer, layerNum) => {
+      layer.ary.forEach((y, pointY) => {
+          y.forEach((x, pointX) => {
+            if(x === color) {
+               this.changeStagePxColor({layerNum, pointY, pointX, color: color2})
+            }
+          })
+      })
+    })
   }
 
   zoom(percent) {

@@ -30,6 +30,7 @@ export class OekakiCanvas extends React.Component {
 	render () {
 		const {
 			stage,
+			colors,
 			stage: {
 				layers,
 				layerNum,
@@ -46,7 +47,7 @@ export class OekakiCanvas extends React.Component {
 				nonActiveData: nonActiveHistories,
 				selectedHistoryNum
 			},
-			OekakiCanvasActions: { changeOekaki, changeStage, changeHistory },
+			OekakiCanvasActions: { changeOekaki, changeStage, changeHistory, changeColors },
 			ConfirmModalActions: { showModal }
 		} = this.props
 
@@ -71,7 +72,10 @@ export class OekakiCanvas extends React.Component {
 
 				<ActualSize />
 
-				<OekakiColor {...{ oekaki, color }} />
+				<OekakiColor
+					updateColors={() => changeColors(stage.getAllColor())}
+					updateCanvas={::this.updateCanvas}
+					{...{ stage, oekaki, color, colors, changeOekaki }} />
 
 				<p><img src={history.gif} /></p>
 
@@ -108,7 +112,8 @@ export class OekakiCanvas extends React.Component {
 			changeOekaki,
 			changeMiniOekaki,
 			changeXminiOekaki,
-			changeHistory
+			changeHistory,
+			changeColors,
 		} = this.props.OekakiCanvasActions
 
 		//create history
@@ -151,6 +156,8 @@ export class OekakiCanvas extends React.Component {
 
 				this.updateCanvas({mainUpdate: false})
 
+				changeColors(stage.getAllColor())
+
 				//console.log(new RGBColor(oekaki.color));
 				//console.log('test');
 			}
@@ -161,6 +168,7 @@ export class OekakiCanvas extends React.Component {
 		this.updateCanvas({ stage, oekaki, miniOekaki, x_miniOekaki })
 
 		//actions
+		changeColors(stage.getAllColor())
 		changeOekaki(oekaki)
 		changeMiniOekaki(miniOekaki)
 		changeXminiOekaki(x_miniOekaki)
