@@ -22,6 +22,7 @@
   left: 0;
   background-color: var(--base-color);
   display: none;
+  box-shadow: var(--ui-box-shadow);
 }
 
 .menu_child_item,
